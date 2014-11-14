@@ -1,15 +1,20 @@
 package sudoku;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import Implementaciones.Matriz;
 
 public class Sudoku {
 
-	public int n = 4;	
-	public Matriz<Integer> matriz;
+	private int n = 4;	
+	private Matriz<Integer> matriz;
 	
-	public Matriz<Boolean> filas;
-	public Matriz<Boolean> columnas;
-	public Matriz<Boolean> cuadrantes;
+	private Matriz<Boolean> filas;
+	private Matriz<Boolean> columnas;
+	private Matriz<Boolean> cuadrantes;
 	
 	private int[][] cuadrantesAux;
 	
@@ -26,15 +31,131 @@ public class Sudoku {
 		columnas.inicializarMatriz(n);
 		cuadrantes.inicializarMatriz(n);
 		
-		inicializarMatrizCalculoCuadrantes();
-		
 		inicializarMatricesAuxiliares();
 	}
 	
+	/**
+	 * Dice si el sudoku es válido
+	 * @return verdadero en caso de ser válido, falso en caso contrario
+	 */
+	public Boolean isValido()
+	{
+		Boolean isValido = true;
+		
+		for (int i = 1; i <= n; i++) {
+			Integer[] fila = getFila(i);
+			Boolean isFilaValida = !contieneDuplicados(fila);
+			
+			Integer[] columna = getColumna(i);
+			Boolean isColumnaValida = !contieneDuplicados(columna);
+			
+			Integer[] cuadrante = getCuadrante(i);
+			Boolean isCuadranteValido = !contieneDuplicados(cuadrante);
+			
+			isValido &= isFilaValida && isColumnaValida && isCuadranteValido;
+		}
+		
+		return isValido;
+	}
+	
+	/**
+	 * Obtiene del tablero la fila
+	 * @param número de fila (not zero-based)
+	 * @return la fila ubicada en el número recibido como parámetro
+	 */
+	public Integer[] getFila(int numero) {
+		Integer[] fila = new Integer[n];
+		
+		for(int i = 0; i < n; i++) {
+			if (this.filas.obtenerValor(numero - 1, i) != null)
+				fila[i] = i + 1;
+		}
+		
+		return fila;
+	}
+	
+	/**
+	 * Obtiene del tablero la columna
+	 * @param número de columna (not zero-based)
+	 * @return la columna ubicada en el número recibido como parámetro
+	 */
+	public Integer[] getColumna(int numero) {
+		Integer[] columna = new Integer[n];
+		
+		for(int j = 0; j < n; j++) { 
+			if (this.columnas.obtenerValor(j, numero - 1) != null)
+				columna[j] = j + 1;
+		}
+		
+		return columna;
+	}
+	
+	/**
+	 * Obtiene del tablero el cuadrante
+	 * @param número de cuadrante (not zero-based)
+	 * @return el cuadrante ubicado en el número recibido como parámetro
+	 */
+	public Integer[] getCuadrante(int numero) {
+		Integer[] cuadrante = new Integer[n];
+		
+		for(int i = 0; i < n; i++) { 
+			if (this.cuadrantes.obtenerValor(numero - 1, i) != null)
+				cuadrante[i] = i + 1;
+		}
+		
+		return cuadrante;
+	}
+	
+	/**
+	 * Dice si un valor está contenido en una fila
+	 * @param fila número de fila (not zero-based)
+	 * @param valor sobre el que se desea saber si está o no contenido
+	 * @return verdadero en caso de estar contenido, falso en caso contrario
+	 */
+	public Boolean filaContieneValor(int fila, int valor)
+	{
+		return Arrays.asList(this.getFila(fila)).contains(valor);
+	}
+
+	/**
+	 * Dice si un valor está contenido en una columna
+	 * @param columna número de columna (not zero-based)
+	 * @param valor sobre el que se desea saber si está o no contenido
+	 * @return verdadero en caso de estar contenido, falso en caso contrario
+	 */
+	public Boolean columnaContieneValor(int columna, int valor)
+	{
+		return Arrays.asList(this.getColumna(columna)).contains(valor);
+	}
+
+	/**
+	 * Dice si un valor está contenido en un cuadrante
+	 * @param cuandrante número de cuadrante (not zero-based)
+	 * @param valor sobre el que se desea saber si está o no contenido
+	 * @return verdadero en caso de estar contenido, falso en caso contrario
+	 */
+	public Boolean cuadranteContieneValor(int cuadrante, int valor)
+	{
+		return Arrays.asList(this.getCuadrante(cuadrante)).contains(valor);
+	}
+	
+	public Boolean contieneDuplicados(Integer[] arreglo) {
+		List<Integer> lista = Arrays.asList(arreglo);
+		Set<Integer> set = new HashSet<Integer>();
+        
+		for (Integer valor : lista) {
+            if (valor != null && !set.add(valor)) {
+                return true;
+            }
+        }
+		
+        return false;
+	}
+	
 	private void inicializarMatricesAuxiliares() {
-		// i: fila
+		inicializarMatrizCalculoCuadrantes();
+		
 		for (int i = 0; i < n; i++) {
-			// j: columna
 			for (int j = 0; j < n; j++) {
 				Integer valor = matriz.obtenerValor(i, j); 
 				if (valor != null) {
@@ -66,7 +187,7 @@ public class Sudoku {
 		}
 	}
 	
-	public int calcularCuadrante(int i, int j) {
+	private int calcularCuadrante(int i, int j) {
 		int x = (int)(i / Math.sqrt(n));
 		int y = (int)(j / Math.sqrt(n));
 		

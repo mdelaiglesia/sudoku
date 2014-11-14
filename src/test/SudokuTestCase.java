@@ -46,67 +46,67 @@ public class SudokuTestCase {
 	@Test
 	public void obtencionFilasTestCase() {	
 		assertTrue(sudoku.isValorEnFila(1, 1));
-		assertFalse(sudoku.isValorEnFila(1, 2));
-		assertTrue(sudoku.isValorEnFila(1, 3));
-		assertFalse(sudoku.isValorEnFila(1, 4));
-		
 		assertFalse(sudoku.isValorEnFila(2, 1));
-		assertTrue(sudoku.isValorEnFila(2, 2));
-		assertFalse(sudoku.isValorEnFila(2, 3));
-		assertTrue(sudoku.isValorEnFila(2, 4));
-		
 		assertTrue(sudoku.isValorEnFila(3, 1));
-		assertTrue(sudoku.isValorEnFila(3, 2));
-		assertFalse(sudoku.isValorEnFila(3, 3));
-		assertFalse(sudoku.isValorEnFila(3, 4));
-		
 		assertFalse(sudoku.isValorEnFila(4, 1));
+		
+		assertFalse(sudoku.isValorEnFila(1, 2));
+		assertTrue(sudoku.isValorEnFila(2, 2));
+		assertFalse(sudoku.isValorEnFila(3, 2));
 		assertTrue(sudoku.isValorEnFila(4, 2));
-		assertTrue(sudoku.isValorEnFila(4, 3));
+		
+		assertTrue(sudoku.isValorEnFila(1, 3));
+		assertTrue(sudoku.isValorEnFila(2, 3));
+		assertFalse(sudoku.isValorEnFila(3, 3));
+		assertFalse(sudoku.isValorEnFila(4, 3));
+		
+		assertFalse(sudoku.isValorEnFila(1, 4));
+		assertTrue(sudoku.isValorEnFila(2, 4));
+		assertTrue(sudoku.isValorEnFila(3, 4));
 		assertFalse(sudoku.isValorEnFila(4, 4));
 	}
 	
 	public void obtencionColumnasTestCase() {
 		assertTrue(sudoku.isValorEnColumna(1, 1));
-		assertTrue(sudoku.isValorEnColumna(1, 2));
-		assertFalse(sudoku.isValorEnColumna(1, 3));
-		assertFalse(sudoku.isValorEnColumna(1, 4));
-		
 		assertTrue(sudoku.isValorEnColumna(2, 1));
-		assertTrue(sudoku.isValorEnColumna(2, 2));
-		assertTrue(sudoku.isValorEnColumna(2, 3));
-		assertFalse(sudoku.isValorEnColumna(2, 4));
-		
 		assertFalse(sudoku.isValorEnColumna(3, 1));
-		assertTrue(sudoku.isValorEnColumna(3, 2));
-		assertTrue(sudoku.isValorEnColumna(3, 3));
-		assertFalse(sudoku.isValorEnColumna(3, 4));
-		
 		assertFalse(sudoku.isValorEnColumna(4, 1));
+		
+		assertTrue(sudoku.isValorEnColumna(1, 2));
+		assertTrue(sudoku.isValorEnColumna(2, 2));
+		assertTrue(sudoku.isValorEnColumna(3, 2));
 		assertFalse(sudoku.isValorEnColumna(4, 2));
+		
+		assertFalse(sudoku.isValorEnColumna(1, 3));
+		assertTrue(sudoku.isValorEnColumna(2, 3));
+		assertTrue(sudoku.isValorEnColumna(3, 3));
 		assertFalse(sudoku.isValorEnColumna(4, 3));
+		
+		assertFalse(sudoku.isValorEnColumna(1, 4));
+		assertFalse(sudoku.isValorEnColumna(2, 4));
+		assertFalse(sudoku.isValorEnColumna(3, 4));
 		assertTrue(sudoku.isValorEnColumna(4, 4));
 	}
 	
 	public void obtencionCuadrantesTestCase() {
 		assertTrue(sudoku.isValorEnCuadrante(1, 1));
-		assertTrue(sudoku.isValorEnCuadrante(1, 2));
-		assertTrue(sudoku.isValorEnCuadrante(1, 3));
-		assertFalse(sudoku.isValorEnCuadrante(1, 4));
-		
-		assertFalse(sudoku.isValorEnCuadrante(2, 1));
-		assertFalse(sudoku.isValorEnCuadrante(2, 2));
-		assertFalse(sudoku.isValorEnCuadrante(2, 3));
-		assertTrue(sudoku.isValorEnCuadrante(2, 4));
-		
+		assertTrue(sudoku.isValorEnCuadrante(2, 1));
 		assertTrue(sudoku.isValorEnCuadrante(3, 1));
-		assertTrue(sudoku.isValorEnCuadrante(3, 2));
-		assertFalse(sudoku.isValorEnCuadrante(3, 3));
-		assertFalse(sudoku.isValorEnCuadrante(3, 4));
-		
 		assertFalse(sudoku.isValorEnCuadrante(4, 1));
+		
+		assertFalse(sudoku.isValorEnCuadrante(1, 2));
+		assertFalse(sudoku.isValorEnCuadrante(2, 2));
+		assertFalse(sudoku.isValorEnCuadrante(3, 2));
 		assertTrue(sudoku.isValorEnCuadrante(4, 2));
-		assertTrue(sudoku.isValorEnCuadrante(4, 3));
+		
+		assertTrue(sudoku.isValorEnCuadrante(1, 3));
+		assertTrue(sudoku.isValorEnCuadrante(2, 3));
+		assertFalse(sudoku.isValorEnCuadrante(3, 3));
+		assertFalse(sudoku.isValorEnCuadrante(4, 3));
+		
+		assertFalse(sudoku.isValorEnCuadrante(1, 4));
+		assertTrue(sudoku.isValorEnCuadrante(2, 4));
+		assertTrue(sudoku.isValorEnCuadrante(3, 4));
 		assertFalse(sudoku.isValorEnCuadrante(4, 4));
 	}
 

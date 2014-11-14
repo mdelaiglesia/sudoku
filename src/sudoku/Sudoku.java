@@ -44,13 +44,13 @@ public class Sudoku {
 		
 		for (int i = 1; i <= n; i++) {
 			Integer[] fila = getFila(i);
-			Boolean isFilaValida = !contieneDuplicados(fila);
+			Boolean isFilaValida = !hasDuplicates(fila);
 			
 			Integer[] columna = getColumna(i);
-			Boolean isColumnaValida = !contieneDuplicados(columna);
+			Boolean isColumnaValida = !hasDuplicates(columna);
 			
 			Integer[] cuadrante = getCuadrante(i);
-			Boolean isCuadranteValido = !contieneDuplicados(cuadrante);
+			Boolean isCuadranteValido = !hasDuplicates(cuadrante);
 			
 			isValido &= isFilaValida && isColumnaValida && isCuadranteValido;
 		}
@@ -112,7 +112,7 @@ public class Sudoku {
 	 * @param valor sobre el que se desea saber si está o no contenido
 	 * @return verdadero en caso de estar contenido, falso en caso contrario
 	 */
-	public Boolean filaContieneValor(int fila, int valor)
+	public Boolean isValorEnFila(int fila, int valor)
 	{
 		return Arrays.asList(this.getFila(fila)).contains(valor);
 	}
@@ -123,7 +123,7 @@ public class Sudoku {
 	 * @param valor sobre el que se desea saber si está o no contenido
 	 * @return verdadero en caso de estar contenido, falso en caso contrario
 	 */
-	public Boolean columnaContieneValor(int columna, int valor)
+	public Boolean isValorEnColumna(int columna, int valor)
 	{
 		return Arrays.asList(this.getColumna(columna)).contains(valor);
 	}
@@ -134,12 +134,12 @@ public class Sudoku {
 	 * @param valor sobre el que se desea saber si está o no contenido
 	 * @return verdadero en caso de estar contenido, falso en caso contrario
 	 */
-	public Boolean cuadranteContieneValor(int cuadrante, int valor)
+	public Boolean isValorEnCuadrante(int cuadrante, int valor)
 	{
 		return Arrays.asList(this.getCuadrante(cuadrante)).contains(valor);
 	}
 	
-	public Boolean contieneDuplicados(Integer[] arreglo) {
+	public Boolean hasDuplicates(Integer[] arreglo) {
 		List<Integer> lista = Arrays.asList(arreglo);
 		Set<Integer> set = new HashSet<Integer>();
         

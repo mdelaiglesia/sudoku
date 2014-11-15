@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sudoku.Posicion;
 import sudoku.Sudoku;
 import Implementaciones.Matriz;
 
@@ -17,11 +18,16 @@ public class SudokuTestCase {
 	//  . 2 3 .
 	private Sudoku sudoku;
 	
+	private Matriz<Integer> matriz;
+	
+	private Integer n;
+	
 	@Before
 	public void setUp() throws Exception {
+		n = 4;
 		
-		Matriz<Integer> matriz = new Matriz<Integer>();
-		matriz.inicializarMatriz(4);
+		matriz = new Matriz<Integer>();
+		matriz.inicializarMatriz(n);
 		matriz.setearValor(0, 0, 1);
 		matriz.setearValor(0, 1, 3);
 		matriz.setearValor(1, 0, 2);
@@ -37,10 +43,25 @@ public class SudokuTestCase {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test
+	public void resolverSudokuTestCase() {
+		
+		Matriz<Integer> resultado = sudoku.resolverSudoku();
+
+		sudoku.imprimirMatriz(resultado);
+	}
 
 	@Test
 	public void isValidoTestCase() {
 		assertTrue(sudoku.isValido());
+	}
+
+	@Test
+	public void isValidoConModificacionTestCase() {
+		sudoku.setearValor(1, 3, 1);
+		
+		assertFalse(sudoku.isValido());
 	}
 	
 	@Test

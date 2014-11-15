@@ -34,6 +34,75 @@ public class Sudoku {
 		inicializarMatricesAuxiliares();
 	}
 	
+	public Matriz<Integer> resolverSudoku() {
+		
+		Posicion posicionActual = new Posicion(0, 0, n);
+		
+		Integer ubicados = 0;
+		
+		Matriz<Integer> retorno = backtracking(posicionActual, ubicados);
+		
+		return retorno;
+	}
+	
+	public void setearValor(int i, int j, Integer nuevoValor) {
+		if (nuevoValor != null) {
+			matriz.setearValor(i - 1, j - 1, nuevoValor);
+			filas.setearValor(i - 1, nuevoValor - 1, true);
+			columnas.setearValor(j - 1, nuevoValor - 1, true);
+			cuadrantes.setearValor(calcularCuadrante(i, j), nuevoValor - 1, true);
+		}
+		else {
+			Integer valorAntiguo = matriz.obtenerValor(i - 1, j - 1);
+			
+			filas.setearValor(i - 1, valorAntiguo - 1, false);
+			columnas.setearValor(j - 1, valorAntiguo - 1, false);
+			cuadrantes.setearValor(calcularCuadrante(i, j), valorAntiguo - 1, false);
+			
+			matriz.setearValor(i - 1, j - 1, nuevoValor);
+		}
+	}
+	
+	private Matriz<Integer> backtracking(Posicion posicionActual, int ubicados) {
+		
+		Matriz<Integer> retorno = null;
+		
+		if ((n * n) == ubicados)
+		{
+			if (isValido()) {
+				retorno = matriz;
+			}
+		}
+		else {
+			for (int valor = 1; valor <= n && ubicados < n * n; valor++) {
+				Posicion siguiente = posicionActual.calcularSiguiente(posicionActual);
+				
+				if (matriz.obtenerValor(posicionActual.fila, posicionActual.columna) == null) {
+					
+					setearValor(posicionActual.fila + 1, posicionActual.columna + 1, valor);
+
+					Matriz<Integer> ret = backtracking(siguiente, ++ubicados);
+					
+					if (ret != null) {
+						return ret;
+					}
+					else {
+						setearValor(posicionActual.fila + 1, posicionActual.columna + 1, null);
+					}
+				}
+				else {
+					Matriz<Integer> ret = backtracking(siguiente, ++ubicados);
+					
+					if (ret != null) {
+						return ret;
+					}
+				}
+			}
+		}
+		
+		return retorno;
+	}
+	
 	/**
 	 * Dice si el sudoku es válido
 	 * @return verdadero en caso de ser válido, falso en caso contrario
@@ -58,6 +127,15 @@ public class Sudoku {
 		return isValido;
 	}
 	
+	public void imprimirMatriz(Matriz<Integer> matriz) {
+		for(int i = 0; i < n; i++) { 
+			for(int j = 0; j < n; j++) { 
+				System.out.print(matriz.obtenerValor(i, j) + " ");
+			}
+			System.out.println();
+		}
+	}
+	
 	/**
 	 * Obtiene del tablero la fila
 	 * @param número de fila (not zero-based)
@@ -67,8 +145,7 @@ public class Sudoku {
 		Integer[] fila = new Integer[n];
 		
 		for(int i = 0; i < n; i++) {
-			if (this.filas.obtenerValor(numero - 1, i) != null)
-				fila[i] = i + 1;
+			fila[i] = this.matriz.obtenerValor(numero - 1, i);
 		}
 		
 		return fila;
@@ -82,9 +159,8 @@ public class Sudoku {
 	public Integer[] getColumna(int numero) {
 		Integer[] columna = new Integer[n];
 		
-		for(int j = 0; j < n; j++) { 
-			if (this.columnas.obtenerValor(j, numero - 1) != null)
-				columna[j] = j + 1;
+		for(int i = 0; i < n; i++) {
+			columna[i] = this.matriz.obtenerValor(i, numero - 1);
 		}
 		
 		return columna;
@@ -98,9 +174,16 @@ public class Sudoku {
 	public Integer[] getCuadrante(int numero) {
 		Integer[] cuadrante = new Integer[n];
 		
-		for(int i = 0; i < n; i++) { 
-			if (this.cuadrantes.obtenerValor(numero - 1, i) != null)
-				cuadrante[i] = i + 1;
+		int indice = 0;
+		
+		int desde = (int) (Math.sqrt(n) * (numero - 1));
+		int hasta = (int) (Math.sqrt(n) * numero);
+		
+		for(int i = 0; i >= desde && i < hasta; i++) {
+			for(int j = 0;  j >= desde && j < hasta; j++) {
+				cuadrante[indice] = this.matriz.obtenerValor(i, j);
+				indice++;
+			}
 		}
 		
 		return cuadrante;

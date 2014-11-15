@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import Implementaciones.Matriz;
 
@@ -38,69 +39,67 @@ public class Sudoku {
 		
 		Posicion posicionActual = new Posicion(0, 0, n);
 		
-		Integer ubicados = 0;
+		return backtracking(posicionActual, 0);
+	}
+
+	private Matriz<Integer> backtracking(Posicion posicionActual, int ubicados) {
 		
-		Matriz<Integer> retorno = backtracking(posicionActual, ubicados);
+		if ((n * n) == ubicados)
+		{
+			if (isValido()) {
+				return matriz;
+			}
+			else {
+				return null;
+			}
+		}
 		
-		return retorno;
+		for (int valor = 1; valor <= n; valor++) {
+			
+			if (isCandidato(posicionActual.fila, posicionActual.columna)) {
+				setearValor(posicionActual.fila + 1, posicionActual.columna + 1, valor);
+				imprimirMatriz(matriz);
+			}
+			
+			Posicion siguiente = posicionActual.calcularSiguiente(posicionActual);
+			Matriz<Integer> resultado = backtracking(siguiente, ++ubicados);
+			
+			if (resultado != null)
+				return resultado;
+			
+			setearValor(posicionActual.fila + 1, posicionActual.columna + 1, null);
+			ubicados--;
+			
+			imprimirMatriz(matriz);
+		}
+	
+		return null;
 	}
 	
+	private Boolean isCandidato(int fila, int columna) {
+		
+		if (matriz.obtenerValor(fila, columna) == null)
+			return true;
+		
+		return false;
+	}
+
 	public void setearValor(int i, int j, Integer nuevoValor) {
 		if (nuevoValor != null) {
 			matriz.setearValor(i - 1, j - 1, nuevoValor);
 			filas.setearValor(i - 1, nuevoValor - 1, true);
 			columnas.setearValor(j - 1, nuevoValor - 1, true);
-			cuadrantes.setearValor(calcularCuadrante(i, j), nuevoValor - 1, true);
+			cuadrantes.setearValor(calcularCuadrante(i - 1, j - 1), nuevoValor - 1, true);
 		}
 		else {
 			Integer valorAntiguo = matriz.obtenerValor(i - 1, j - 1);
 			
 			filas.setearValor(i - 1, valorAntiguo - 1, false);
 			columnas.setearValor(j - 1, valorAntiguo - 1, false);
-			cuadrantes.setearValor(calcularCuadrante(i, j), valorAntiguo - 1, false);
+			cuadrantes.setearValor(calcularCuadrante(i - 1, j - 1), valorAntiguo - 1, false);
 			
 			matriz.setearValor(i - 1, j - 1, nuevoValor);
 		}
-	}
-	
-	private Matriz<Integer> backtracking(Posicion posicionActual, int ubicados) {
-		
-		Matriz<Integer> retorno = null;
-		
-		if ((n * n) == ubicados)
-		{
-			if (isValido()) {
-				retorno = matriz;
-			}
-		}
-		else {
-			for (int valor = 1; valor <= n && ubicados < n * n; valor++) {
-				Posicion siguiente = posicionActual.calcularSiguiente(posicionActual);
-				
-				if (matriz.obtenerValor(posicionActual.fila, posicionActual.columna) == null) {
-					
-					setearValor(posicionActual.fila + 1, posicionActual.columna + 1, valor);
-
-					Matriz<Integer> ret = backtracking(siguiente, ++ubicados);
-					
-					if (ret != null) {
-						return ret;
-					}
-					else {
-						setearValor(posicionActual.fila + 1, posicionActual.columna + 1, null);
-					}
-				}
-				else {
-					Matriz<Integer> ret = backtracking(siguiente, ++ubicados);
-					
-					if (ret != null) {
-						return ret;
-					}
-				}
-			}
-		}
-		
-		return retorno;
 	}
 	
 	/**
@@ -128,12 +127,19 @@ public class Sudoku {
 	}
 	
 	public void imprimirMatriz(Matriz<Integer> matriz) {
+		Integer valor;
 		for(int i = 0; i < n; i++) { 
 			for(int j = 0; j < n; j++) { 
-				System.out.print(matriz.obtenerValor(i, j) + " ");
+				valor = matriz.obtenerValor(i, j);
+				
+				if (valor != null) 
+					System.out.print(valor + " ");
+				else
+					System.out.print("_" + " ");
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 	
 	/**
@@ -176,13 +182,22 @@ public class Sudoku {
 		
 		int indice = 0;
 		
-		int desde = (int) (Math.sqrt(n) * (numero - 1));
-		int hasta = (int) (Math.sqrt(n) * numero);
+		Posicion rangoFila = new Posicion();
+		Posicion rangoColumna = new Posicion();
+		calcularRango(numero, rangoFila, rangoColumna);
 		
-		for(int i = 0; i >= desde && i < hasta; i++) {
-			for(int j = 0;  j >= desde && j < hasta; j++) {
-				cuadrante[indice] = this.matriz.obtenerValor(i, j);
-				indice++;
+		Integer filaDesde = rangoFila.fila;
+		Integer filaHasta = rangoFila.columna;
+		
+		Integer columnaDesde = rangoColumna.fila;
+		Integer columnaHasta = rangoColumna.columna;
+		
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (i >= filaDesde && i < filaHasta && j >= columnaDesde && j < columnaHasta) {
+					cuadrante[indice] = this.matriz.obtenerValor(i, j);
+					indice++;
+				}
 			}
 		}
 		
@@ -276,5 +291,25 @@ public class Sudoku {
 		
 		return cuadrantesAux[x][y];
 	}
-	
+
+	private void calcularRango(int cuadrante, Posicion rangoFila, Posicion rangoColumna) {
+		for(int i = 0; i < Math.sqrt(n); i++){
+			for(int j = 0; j < Math.sqrt(n); j++){
+				if (cuadrantesAux[i][j] == cuadrante - 1) {
+					
+					int filaDesde = (int)(i * Math.sqrt(n));
+					int filaHasta = (int)((i + 1) * Math.sqrt(n));
+					rangoFila.fila = filaDesde;
+					rangoFila.columna = filaHasta;
+					
+					int columnaDesde = (int)(j * Math.sqrt(n));
+					int columnaHasta = (int)((j + 1) * Math.sqrt(n));
+					rangoColumna.fila = columnaDesde;
+					rangoColumna.columna = columnaHasta;
+					
+					return;
+				}
+			}
+		}
+	}
 }

@@ -19,6 +19,8 @@ public class Sudoku {
 	
 	private int[][] cuadrantesAux;
 	
+	public Boolean resolverConPoda;
+	
 	public Sudoku(Matriz<Integer> matriz, int n) {
 		this.n = n;
 		
@@ -35,13 +37,24 @@ public class Sudoku {
 		inicializarMatricesAuxiliares();
 	}
 	
-	public Matriz<Integer> resolverSudoku() {
+	public Matriz<Integer> resolver() {
+		
+		resolverConPoda = false;
 		
 		Posicion posicionActual = new Posicion(0, 0, n);
 		
 		return backtracking(posicionActual, 0);
 	}
 
+	public Matriz<Integer> resolverConPoda() {
+		
+		resolverConPoda = true;
+		
+		Posicion posicionActual = new Posicion(0, 0, n);
+		
+		return backtracking(posicionActual, 0);
+	}
+	
 	private Matriz<Integer> backtracking(Posicion posicionActual, int ubicados) {
 		
 		if ((n * n) == ubicados)
@@ -56,9 +69,12 @@ public class Sudoku {
 		
 		for (int valor = 1; valor <= n; valor++) {
 			
+			if (resolverConPoda && !isValido())
+				return null;
+			
 			if (isCandidato(posicionActual.fila, posicionActual.columna)) {
 				setearValor(posicionActual.fila + 1, posicionActual.columna + 1, valor);
-				imprimirMatriz(matriz);
+				imprimirMatriz();
 			}
 			
 			Posicion siguiente = posicionActual.calcularSiguiente(posicionActual);
@@ -70,7 +86,7 @@ public class Sudoku {
 			setearValor(posicionActual.fila + 1, posicionActual.columna + 1, null);
 			ubicados--;
 			
-			imprimirMatriz(matriz);
+			imprimirMatriz();
 		}
 	
 		return null;
@@ -126,7 +142,7 @@ public class Sudoku {
 		return isValido;
 	}
 	
-	public void imprimirMatriz(Matriz<Integer> matriz) {
+	public void imprimirMatriz() {
 		Integer valor;
 		for(int i = 0; i < n; i++) { 
 			for(int j = 0; j < n; j++) { 

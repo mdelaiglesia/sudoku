@@ -55,20 +55,48 @@ public class SudokuTestCase {
 	}
 	
 	@Test
-	public void resolverSudokuTestCase() {
-		sudoku.resolverSudoku();
+	// ACTIVIDAD 3
+	public void imprimirMatrizTestCase() {
+		sudoku.imprimirMatriz();
 	}
+	
 
 	@Test
+	// ACTIVIDAD 2
+	// ACTIVIDAD 4: Caso válido
 	public void isValidoTestCase() {
 		assertTrue(sudoku.isValido());
 	}
 
 	@Test
+	// ACTIVIDAD 4: Caso inválido
 	public void isValidoConModificacionTestCase() {
 		sudoku.setearValor(1, 3, 1);
 		
 		assertFalse(sudoku.isValido());
+	}
+
+	@Test
+	// ACTIVIDAD 5
+	public void calcularSiguientePosicionTestCase() {
+		Posicion posicionActual = new Posicion(0, 3, n);
+		Posicion siguiente = posicionActual.calcularSiguiente(posicionActual);
+		assertEquals((int)siguiente.fila, 1);
+		assertEquals((int)siguiente.columna, 0);
+	}
+	
+	@Test
+	// ACTIVIDAD 8
+	public void resolverTestCase() {
+		System.out.println("Sin poda:");
+		sudoku.resolver();
+	}
+	
+	@Test
+	// ACTIVIDAD 11
+	public void resolverConPodaTestCase() {
+		System.out.println("Con poda:");
+		sudoku.resolverConPoda();
 	}
 	
 	@Test

@@ -72,21 +72,24 @@ public class Sudoku {
 			if (resolverConPoda && !isValido())
 				return null;
 			
-			if (isCandidato(posicionActual.fila, posicionActual.columna)) {
+			boolean esCandidato = isCandidato(posicionActual.fila, posicionActual.columna);
+			if (esCandidato) {
 				setearValor(posicionActual.fila + 1, posicionActual.columna + 1, valor);
 				imprimirMatriz();
 			}
 			
-			Posicion siguiente = posicionActual.calcularSiguiente(posicionActual);
+			Posicion siguiente = posicionActual.calcularSiguiente(posicionActual)	;
 			Matriz<Integer> resultado = backtracking(siguiente, ++ubicados);
 			
 			if (resultado != null)
 				return resultado;
 			
-			setearValor(posicionActual.fila + 1, posicionActual.columna + 1, null);
-			ubicados--;
-			
-			imprimirMatriz();
+			if (esCandidato) {
+				setearValor(posicionActual.fila + 1, posicionActual.columna + 1, null);
+				ubicados--;
+				
+				imprimirMatriz();
+			}
 		}
 	
 		return null;

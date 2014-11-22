@@ -51,6 +51,15 @@ public class SudokuTestCase {
 		
 		sudoku4x4 = new Sudoku(matriz4x4, matriz4x4.obtenerDimension());
 
+		// 4 2 5 7 1 6 8 3 9
+		// 3 6 8 5 4 9 1 7 2
+		// 1 9 7 3 8 2 6 5 4
+		// 8 4 9 1 6 7 5 2 3
+		// 5 3 1 2 9 4 7 6 8
+		// 2 7 6 8 5 3 4 9 1
+		// 9 1 2 6 7 8 3 4 5
+		// 6 8 3 4 2 5 9 1 7
+		// 7 5 4 9 3 1 2 _ _
 		n9 = 9;
 		
 		matriz9x9 = new Matriz<Integer>();
@@ -140,16 +149,9 @@ public class SudokuTestCase {
 		matriz9x9.setearValor(8, 1, 5);
 		matriz9x9.setearValor(8, 2, 4);
 		matriz9x9.setearValor(8, 3, 9);
-
-		// 4 2 5 7 1 6 8 3 9
-		// 3 6 8 5 4 9 1 7 2
-		// 1 9 7 3 8 2 6 5 4
-		// 8 4 9 1 6 7 5 2 3
-		// 5 3 1 2 9 4 7 6 8
-		// 2 7 6 8 5 3 4 9 1
-		// 9 1 2 6 7 8 3 4 5
-		// 6 8 3 4 2 5 9 1 7
-		// 7 5 4 9 _ _ _ _ _
+		matriz9x9.setearValor(8, 4, 3);
+		matriz9x9.setearValor(8, 5, 1);
+		matriz9x9.setearValor(8, 6, 2);
 		
 		sudoku9x9 = new Sudoku(matriz9x9, matriz9x9.obtenerDimension());
 	}
